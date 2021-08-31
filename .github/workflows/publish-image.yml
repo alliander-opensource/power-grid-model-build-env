@@ -31,9 +31,13 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          flavor: |
+            latest=auto
+            prefix=
+            suffix=
           tags: |
             type=ref,event=branch
-            type=sha
+            type=sha,format=long
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
@@ -42,3 +46,4 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          no-cache: true
