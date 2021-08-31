@@ -3,7 +3,7 @@ FROM quay.io/pypa/manylinux2014_x86_64
 ENV BASE_PYTHON_VERSION cp39-cp39
 ENV VCPKG_FEATURE_FLAGS -binarycaching
 
-## install build packages and mkl
+# install build packages and mkl
 #RUN yum update -y && \
 #    yum install -y curl unzip tar git make cmake3 ninja-build python3 && \
 #    yum clean all && \
