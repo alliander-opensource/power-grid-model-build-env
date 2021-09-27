@@ -17,7 +17,7 @@ RUN /opt/python/${BASE_PYTHON_VERSION}/bin/pip install --no-cache-dir twine && \
 
 # loop to install packages for all python versions
 RUN sh -x && \
-    for PYTHON_VERSION in cp37-cp37m cp38-cp38 cp39-cp39; \
+    for PYTHON_VERSION in cp37-cp37m cp38-cp38 cp39-cp39 cp310-cp310; \
         do \
             echo "===== installing python version ${PYTHON_VERSION} ====="; \
             /opt/python/${PYTHON_VERSION}/bin/pip install --no-cache-dir numpy cython pytest; \
