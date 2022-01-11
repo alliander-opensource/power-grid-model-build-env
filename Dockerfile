@@ -1,6 +1,6 @@
 FROM quay.io/pypa/manylinux2014_x86_64
 
-ENV BASE_PYTHON_VERSION cp39-cp39
+ENV BASE_PYTHON_VERSION cp310-cp310
 ENV VCPKG_FEATURE_FLAGS -binarycaching
 
 # install build packages and mkl
