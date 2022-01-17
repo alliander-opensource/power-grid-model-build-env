@@ -5,7 +5,7 @@ ENV VCPKG_FEATURE_FLAGS -binarycaching
 
 # install build packages and mkl
 RUN yum update -y && \
-    yum install -y curl zip unzip tar git make cmake3 ninja-build python3 && \
+    yum install -y curl zip unzip tar git make cmake3 ninja-build python3 lcov && \
     yum clean all && \
     pip3 install --upgrade pip --no-cache-dir && \
     pip3 install --no-cache-dir mkl mkl-devel
@@ -20,7 +20,7 @@ RUN sh -x && \
     for PYTHON_VERSION in cp37-cp37m cp38-cp38 cp39-cp39 cp310-cp310; \
         do \
             echo "===== installing python version ${PYTHON_VERSION} ====="; \
-            /opt/python/${PYTHON_VERSION}/bin/pip install --no-cache-dir numpy cython pytest pytest-cov lcov; \
+            /opt/python/${PYTHON_VERSION}/bin/pip install --no-cache-dir numpy cython pytest pytest-cov; \
         done \
     \
     #
