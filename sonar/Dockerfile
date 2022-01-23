@@ -15,7 +15,7 @@ ENV LD_LIBRARY_PATH ${MKL_LIB}:${LD_LIBRARY_PATH}
 
 
 # install build packages and mkl
-RUN apt-get -y update && sudo apt-get -y upgrade && \
+RUN apt-get -y update && apt-get -y upgrade && \
     apt-get install -y curl zip unzip tar git build-essential lcov gcc g++ gcc-10 g++-10 clang clang-11 make cmake gdb ninja-build pkg-config python3.9 python3.9-dev python3.9-venv python3-pip && \
     apt-get clean -y && \
     python3.9 -m pip install --upgrade pip --no-cache-dir && \
