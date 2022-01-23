@@ -20,7 +20,7 @@ RUN apt-get -y update && apt-get -y upgrade && \
     apt-get clean -y && \
     python3.9 -m pip install --upgrade pip --no-cache-dir && \
     python3.9 -m pip install --no-cache-dir mkl mkl-include mkl-devel && \
-    python3.9 -m venv /opt/.venv && \
+    python3.9 -m venv /opt/venv && \
     /opt/venv/bin/pip install --no-cache-dir numpy cython pytest pytest-cov twine
 
 
