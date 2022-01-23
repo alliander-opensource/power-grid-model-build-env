@@ -1,4 +1,4 @@
-FROM quay.io/pypa/manylinux2014_x86_64
+FROM ubuntu
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV CXX g++-10
