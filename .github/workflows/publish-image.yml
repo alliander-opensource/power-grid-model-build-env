@@ -7,11 +7,13 @@ on:
     
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+
 
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: ${{ github.repository }}
     permissions:
       contents: read
       packages: write
@@ -43,7 +45,48 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: manylinux
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          no-cache: true
+
+  build-and-push-image-sonar:
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: ${{ github.repository }}-sonar
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          flavor: |
+            latest=true
+            prefix=
+            suffix=
+          tags: |
+            type=ref,event=branch
+            type=sha,format=long
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: sonar
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
