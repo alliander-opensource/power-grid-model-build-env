@@ -1,8 +1,9 @@
 FROM ubuntu
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV CXX g++-10
-ENV CC gcc-10
+ENV CXX clang++-11
+ENV CC clang-11
+ENV LLVM_COV=llvm-cov-11
 ENV VCPKG_FEATURE_FLAGS -binarycaching
 ENV VCPKG_ROOT /opt/vcpkg
 ENV MKL_INCLUDE /usr/local/include
