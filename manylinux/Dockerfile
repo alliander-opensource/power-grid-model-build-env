@@ -3,6 +3,7 @@ FROM quay.io/pypa/manylinux2014_x86_64
 ENV BASE_PYTHON_VERSION cp310-cp310
 ENV VCPKG_FEATURE_FLAGS -binarycaching
 
+
 # install build packages and mkl
 RUN yum update -y && \
     yum install -y curl zip unzip tar git make cmake3 ninja-build python3 lcov && \
@@ -11,30 +12,16 @@ RUN yum update -y && \
     pip3 install --no-cache-dir mkl mkl-devel
 
 
-# global twine
-RUN /opt/python/${BASE_PYTHON_VERSION}/bin/pip install --no-cache-dir twine && \
-    ln -s /opt/python/${BASE_PYTHON_VERSION}/bin/twine /usr/local/bin/twine
-
-# loop to install packages for all python versions
-RUN sh -x && \
-    for PYTHON_VERSION in cp37-cp37m cp38-cp38 cp39-cp39 cp310-cp310; \
-        do \
-            echo "===== installing python version ${PYTHON_VERSION} ====="; \
-            /opt/python/${PYTHON_VERSION}/bin/pip install --no-cache-dir numpy cython pytest pytest-cov; \
-        done \
-    \
-    #
-    && echo "Finish Python install!"
-
 # vcpkg
 RUN cd /opt && \
 	git clone https://github.com/Microsoft/vcpkg.git && \
 	cd vcpkg && \
 	./bootstrap-vcpkg.sh && \
-	./vcpkg install eigen3 nlohmann-json msgpack catch2 boost tbb openblas[core] && \
+	./vcpkg install eigen3 nlohmann-json catch2 boost && \
 	rm -rf downloads &&\
 	rm -rf buildtrees &&\
 	rm -rf packages
+
 
 ENV CXX g++
 ENV CC gcc
