@@ -1,9 +1,9 @@
-FROM ubuntu
+FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV CXX clang++-11
-ENV CC clang-11
-ENV LLVM_COV=llvm-cov-11
+ENV CXX clang++-14
+ENV CC clang-14
+ENV LLVM_COV=llvm-cov-14
 ENV VCPKG_FEATURE_FLAGS -binarycaching
 ENV VCPKG_ROOT /opt/vcpkg
 ENV MKL_INCLUDE /usr/local/include
@@ -17,11 +17,11 @@ ENV LD_LIBRARY_PATH ${MKL_LIB}:${LD_LIBRARY_PATH}
 
 # install build packages and mkl
 RUN apt-get -y update && apt-get -y upgrade && \
-    apt-get install -y curl zip unzip tar git build-essential gcovr lcov gcc-10 g++-10 clang-11 make cmake gdb ninja-build pkg-config python3.9 python3.9-dev python3.9-venv python3-pip && \
+    apt-get install -y curl zip unzip tar git build-essential gcovr lcov gcc g++ clang make cmake gdb ninja-build pkg-config python3.10 python3.10-dev python3.10-venv python3-pip && \
     apt-get clean -y && \
-    python3.9 -m pip install --upgrade pip --no-cache-dir && \
-    python3.9 -m pip install --no-cache-dir mkl mkl-include mkl-devel && \
-    python3.9 -m venv /opt/venv
+    python3.10 -m pip install --upgrade pip --no-cache-dir && \
+    python3.10 -m pip install --no-cache-dir mkl mkl-include mkl-devel && \
+    python3.10 -m venv /opt/venv
 
 
 # vcpkg
