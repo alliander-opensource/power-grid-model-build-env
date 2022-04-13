@@ -16,7 +16,7 @@ ENV MINICONDA_URL=https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x8
 
 # install build packages
 RUN yum update -y && \
-    yum install -y curl zip unzip tar git make cmake3 ninja-build && \
+    yum install -y curl zip unzip tar git make cmake3 ninja-build wget && \
     yum clean all
 
 
