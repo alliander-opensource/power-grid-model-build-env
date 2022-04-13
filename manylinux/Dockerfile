@@ -1,37 +1,35 @@
 FROM quay.io/pypa/manylinux2014_x86_64
 
-ENV BASE_PYTHON_VERSION cp310-cp310
-ENV VCPKG_FEATURE_FLAGS -binarycaching
+ENV CXX=g++
+ENV CC=gcc
+ENV CONDA_ROOT=/opt/conda
+ENV CMAKE_PREFIX_PATH=/opt/cpp_pkgs
+ENV EIGEN_INCLUDE=${CMAKE_PREFIX_PATH}/include/eigen3
+ENV BOOST_INCLUDE=${CMAKE_PREFIX_PATH}/include
+ENV MKL_INCLUDE=${CMAKE_PREFIX_PATH}/include
+ENV MKL_LIB=${CMAKE_PREFIX_PATH}/lib
+ENV MKL_THREADING_LAYER=SEQUENTIAL
+ENV MKL_INTERFACE_LAYER=LP64
+ENV LD_LIBRARY_PATH=${MKL_LIB}:${LD_LIBRARY_PATH}
+ENV MINICONDA_URL=https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 
 
-# install build packages and mkl
+# install build packages
 RUN yum update -y && \
-    yum install -y curl zip unzip tar git make cmake3 ninja-build python3 lcov kernel-devel && \
-    yum clean all && \
-    pip3 install --upgrade pip --no-cache-dir && \
-    pip3 install --no-cache-dir mkl mkl-devel
+    yum install -y curl zip unzip tar git make cmake3 ninja-build && \
+    yum clean all
 
 
-# vcpkg
-RUN cd /opt && \
-	git clone https://github.com/Microsoft/vcpkg.git && \
-	cd vcpkg && \
-	./bootstrap-vcpkg.sh && \
-	./vcpkg install eigen3 nlohmann-json catch2 boost && \
-	rm -rf downloads &&\
-	rm -rf buildtrees &&\
-	rm -rf packages
+# conda
+RUN wget "${MINICONDA_URL}" -O miniconda.sh -q && \
+    mkdir -p /opt && \
+    sh miniconda.sh -b -p ${CONDA_ROOT} && \
+    rm miniconda.sh && \
+    . ${CONDA_ROOT}/etc/profile.d/conda.sh && \
+    conda activate base && \
+    conda create --yes -p ${CMAKE_PREFIX_PATH} -c conda-forge boost-cpp eigen nlohmann_json catch2 mkl mkl-include mkl-devel && \
+    conda deactivate && \
+    rm -rf ${CONDA_ROOT}
 
-
-ENV CXX g++
-ENV CC gcc
-ENV VCPKG_ROOT /opt/vcpkg
-ENV MKL_INCLUDE /usr/local/include
-ENV MKL_LIB /usr/local/lib
-ENV EIGEN_INCLUDE ${VCPKG_ROOT}/installed/x64-linux/include/eigen3
-ENV BOOST_INCLUDE ${VCPKG_ROOT}/installed/x64-linux/include
-ENV MKL_THREADING_LAYER SEQUENTIAL
-ENV MKL_INTERFACE_LAYER LP64
-ENV LD_LIBRARY_PATH ${MKL_LIB}:${LD_LIBRARY_PATH}
 
 CMD [ "/bin/bash" ]
