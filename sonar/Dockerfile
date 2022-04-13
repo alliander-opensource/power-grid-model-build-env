@@ -7,13 +7,14 @@ ENV LLVM_COV=llvm-cov-14
 ENV MKL_INCLUDE /usr/local/include
 ENV MKL_LIB /usr/local/lib
 ENV CONDA_ROOT /opt/conda
-ENV EIGEN_INCLUDE ${CONDA_ROOT}/include/eigen3
-ENV BOOST_INCLUDE ${CONDA_ROOT}/include
+ENV CMAKE_PREFIX_PATH /opt/cpp_pkgs
+ENV EIGEN_INCLUDE ${CMAKE_PREFIX_PATH}/include/eigen3
+ENV BOOST_INCLUDE ${CMAKE_PREFIX_PATH}/include
 ENV MKL_THREADING_LAYER SEQUENTIAL
 ENV MKL_INTERFACE_LAYER LP64
 ENV LD_LIBRARY_PATH ${MKL_LIB}:${LD_LIBRARY_PATH}
 ENV MINICONDA_URL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-ENV CMAKE_PREFIX_PATH ${CONDA_ROOT}
+
 
 
 # install build packages and mkl
@@ -35,7 +36,7 @@ RUN wget "${MINICONDA_URL}" -O miniconda.sh -q && \
     conda activate base && \
     find ${CONDA_ROOT}/ -follow -type f -name '*.a' -delete && \
     find ${CONDA_ROOT}/ -follow -type f -name '*.js.map' -delete && \
-    conda install --yes -c conda-forge boost-cpp eigen nlohmann_json catch2 && \
+    conda create --yes -p ${CMAKE_PREFIX_PATH} -c conda-forge python=3.10 boost-cpp eigen nlohmann_json catch2 && \
     conda clean -afy
 
 
