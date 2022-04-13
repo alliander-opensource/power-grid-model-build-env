@@ -28,15 +28,15 @@ RUN apt-get -y update && apt-get -y upgrade && \
 # conda
 RUN wget "${MINICONDA_URL}" -O miniconda.sh -q && \
     mkdir -p /opt && \
-    sh miniconda.sh -b -p /opt/conda && \
+    sh miniconda.sh -b -p ${CONDA_ROOT} && \
     rm miniconda.sh && \
-    ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
-    . /opt/conda/etc/profile.d/conda.sh && \
+    ln -s ${CONDA_ROOT}/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+    . ${CONDA_ROOT}/etc/profile.d/conda.sh && \
     conda activate base && \
-    find /opt/conda/ -follow -type f -name '*.a' -delete && \
-    find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
+    find ${CONDA_ROOT}/ -follow -type f -name '*.a' -delete && \
+    find ${CONDA_ROOT}/ -follow -type f -name '*.js.map' -delete && \
     conda install --yes -c conda-forge boost-cpp eigen nlohmann_json catch2 && \
-    /opt/conda/bin/conda clean -afy
+    conda clean -afy
 
 
 CMD [ "/bin/bash" ]
