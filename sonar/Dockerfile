@@ -17,7 +17,7 @@ ENV LD_LIBRARY_PATH ${MKL_LIB}:${LD_LIBRARY_PATH}
 
 # install build packages and mkl
 RUN apt-get -y update && apt-get -y upgrade && \
-    apt-get install -y curl zip unzip tar git build-essential gcovr lcov gcc g++ clang make cmake gdb ninja-build pkg-config python3.10 python3.10-dev python3.10-venv python3-pip && \
+    apt-get install -y curl zip unzip tar git build-essential gcovr lcov gcc g++ clang make cmake gdb ninja-build pkg-config python3.10 python3.10-dev python3.10-venv python3-pip linux-headers-$(uname -r) && \
     apt-get clean -y && \
     python3.10 -m pip install --upgrade pip --no-cache-dir && \
     python3.10 -m pip install --no-cache-dir mkl mkl-include mkl-devel && \
