@@ -29,7 +29,7 @@ RUN cd /opt && \
 	git clone https://github.com/Microsoft/vcpkg.git && \
 	cd vcpkg && \
 	./bootstrap-vcpkg.sh && \
-    ./vcpkg install openssl && \
+	./vcpkg install openssl && \
 	./vcpkg install eigen3 nlohmann-json catch2 boost && \
 	rm -rf downloads &&\
 	rm -rf buildtrees &&\
