@@ -6,7 +6,7 @@ ENV VCPKG_FEATURE_FLAGS -binarycaching
 
 # install build packages and mkl
 RUN yum update -y && \
-    yum install -y curl zip unzip tar git make cmake3 ninja-build python3 lcov && \
+    yum install -y curl zip unzip tar git make cmake3 ninja-build python3 lcov kernel-devel && \
     yum clean all && \
     pip3 install --upgrade pip --no-cache-dir && \
     pip3 install --no-cache-dir mkl mkl-devel
