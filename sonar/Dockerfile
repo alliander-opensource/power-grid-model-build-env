@@ -33,7 +33,8 @@ RUN wget "${MINICONDA_URL}" -O miniconda.sh -q && \
     conda activate base && \
     conda create --yes -p ${CMAKE_PREFIX_PATH} -c conda-forge boost-cpp eigen nlohmann_json catch2 mkl mkl-include mkl-devel && \
     conda deactivate && \
-    rm -rf ${CONDA_ROOT}
+    rm -rf ${CONDA_ROOT} && \
+    rm /opt/cpp_pkgs/lib/libstd*.*
 
 
 CMD [ "/bin/bash" ]
