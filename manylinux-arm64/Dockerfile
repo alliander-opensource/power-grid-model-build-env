@@ -11,7 +11,9 @@ ENV MINICONDA_URL=https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-aa
 
 
 # install build packages
-RUN yum update -y && \
+RUN yum install -y epel-release && \
+    yum update -y && \
+    yum repolist && \
     yum install -y curl zip unzip tar git make cmake3 ninja-build wget && \
     yum clean all
 
