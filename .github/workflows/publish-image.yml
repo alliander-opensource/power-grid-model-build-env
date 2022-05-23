@@ -15,16 +15,16 @@ jobs:
     strategy:
       matrix:
         folder: [ manylinux, sonar, manylinux-arm64 ]
-      include:
-        - folder: manylinux
-          suffix: ''
-          platform: linux/amd64
-        - folder: sonar
-          suffix: '-sonar'
-          platform: linux/amd64
-        - folder: manylinux-arm64
-          suffix: '-arm64'
-          platform: linux/arm64
+        include:
+          - folder: manylinux
+            suffix: ''
+            platform: linux/amd64
+          - folder: sonar
+            suffix: '-sonar'
+            platform: linux/amd64
+          - folder: manylinux-arm64
+            suffix: '-arm64'
+            platform: linux/arm64
 
     env:
       IMAGE_NAME: ${{ github.repository }}${{ matrix.suffix }}
