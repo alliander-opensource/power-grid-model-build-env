@@ -31,7 +31,7 @@ RUN wget "${MINICONDA_URL}" -O miniconda.sh -q && \
     rm miniconda.sh && \
     . ${CONDA_ROOT}/etc/profile.d/conda.sh && \
     conda activate base && \
-    conda create --yes -p ${CMAKE_PREFIX_PATH} -c conda-forge boost-cpp eigen nlohmann_json catch2 mkl mkl-include mkl-devel && \
+    conda create --yes -p ${CMAKE_PREFIX_PATH} -c conda-forge boost-cpp eigen nlohmann_json catch2==2.13.9 mkl mkl-include mkl-devel && \
     conda deactivate && \
     rm -rf ${CONDA_ROOT} && \
     rm /opt/cpp_pkgs/lib/libstd*.*

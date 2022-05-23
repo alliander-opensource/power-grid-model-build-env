@@ -12,104 +12,35 @@ env:
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        folder: [ manylinux, sonar, manylinux-arm64 ]
+      include:
+        - folder: manylinux
+          suffix: ''
+          platform: linux/amd64
+        - folder: sonar
+          suffix: '-sonar'
+          platform: linux/amd64
+        - folder: manylinux-arm64
+          suffix: '-arm64'
+          platform: linux/arm64
+
     env:
-      IMAGE_NAME: ${{ github.repository }}
+      IMAGE_NAME: ${{ github.repository }}${{ matrix.suffix }}
     permissions:
       contents: read
       packages: write
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Log in to the Container registry
-        uses: docker/login-action@v1
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          flavor: |
-            latest=true
-            prefix=
-            suffix=
-          tags: |
-            type=ref,event=branch
-            type=sha,format=long
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: manylinux
-          platforms: linux/amd64
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          no-cache: true
-
-  build-and-push-image-sonar:
-    runs-on: ubuntu-latest
-    env:
-      IMAGE_NAME: ${{ github.repository }}-sonar
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Log in to the Container registry
-        uses: docker/login-action@v1
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          flavor: |
-            latest=true
-            prefix=
-            suffix=
-          tags: |
-            type=ref,event=branch
-            type=sha,format=long
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: sonar
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          no-cache: true
-
-  build-and-push-image-arm64:
-    runs-on: ubuntu-latest
-    env:
-      IMAGE_NAME: ${{ github.repository }}-arm64
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
+        uses: docker/setup-qemu-action@v2
 
       - name: Log in to the Container registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -129,10 +60,10 @@ jobs:
             type=sha,format=long
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
-          context: manylinux-arm64
-          platforms: linux/arm64
+          context: ${{ matrix.folder }}
+          platforms: ${{ matrix.platform }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
