@@ -8,11 +8,6 @@ ENV CONDA_ROOT=/opt/conda
 ENV CMAKE_PREFIX_PATH=/opt/cpp_pkgs
 ENV EIGEN_INCLUDE=${CMAKE_PREFIX_PATH}/include/eigen3
 ENV BOOST_INCLUDE=${CMAKE_PREFIX_PATH}/include
-ENV MKL_INCLUDE=${CMAKE_PREFIX_PATH}/include
-ENV MKL_LIB=${CMAKE_PREFIX_PATH}/lib
-ENV MKL_THREADING_LAYER=SEQUENTIAL
-ENV MKL_INTERFACE_LAYER=LP64
-ENV LD_LIBRARY_PATH=${MKL_LIB}:${LD_LIBRARY_PATH}
 ENV MINICONDA_URL=https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 
 
@@ -31,7 +26,7 @@ RUN wget "${MINICONDA_URL}" -O miniconda.sh -q && \
     rm miniconda.sh && \
     . ${CONDA_ROOT}/etc/profile.d/conda.sh && \
     conda activate base && \
-    conda create --yes -p ${CMAKE_PREFIX_PATH} -c conda-forge boost-cpp eigen nlohmann_json catch2==2.13.9 mkl mkl-include mkl-devel && \
+    conda create --yes -p ${CMAKE_PREFIX_PATH} -c conda-forge boost-cpp eigen nlohmann_json catch2 && \
     conda deactivate && \
     rm -rf ${CONDA_ROOT} && \
     rm /opt/cpp_pkgs/lib/libstd*.*
